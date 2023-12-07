@@ -1,0 +1,40 @@
+Package: cleanstart
+Title: App for creating Stata data cleaning script from SuSo questionnaire
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Arthur",
+           family = "Shaw",
+           role = c("aut", "cre"),
+           email = "jashaw2002@gmail.com")
+Description: A user-friendly application for quickly creating Stata data 
+    cleaning .do files from the Survey Solutions' questionnaire.
+License: MIT + file LICENSE
+Imports: 
+    bslib,
+    config (>= 0.3.2),
+    dplyr,
+    fontawesome,
+    fs,
+    gargoyle (>= 0.0.1),
+    glue,
+    golem (>= 0.4.1),
+    purrr,
+    R6,
+    rappdirs,
+    rlang,
+    shiny (>= 1.7.5.1),
+    shinyvalidate,
+    stringr,
+    suso2stata (>= 0.0.0.9000),
+    susometa (>= 0.0.0.9000),
+    tidyr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Remotes: 
+    github::lsms-worldbank/suso2stata,
+    github::ColinFay/gargoyle,
+    github::lsms-worldbank/susometa
