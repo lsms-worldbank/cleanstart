@@ -8,14 +8,22 @@
 #' - App version
 #'
 #' @importFrom rappdirs user_data_dir
-#' @importFrom golem get_golem_name get_golem_version
+#' @importFrom desc desc_get
 #'
 #' @return Character. Path to user's app data directory
 construct_user_data_path <- function() {
 
+  app_description_path <- app_sys("DESCRIPTION")
+
   dir <- rappdirs::user_data_dir(
-      appname = golem::get_golem_name(),
-      version = golem::get_golem_version()
+    appname = desc::desc_get(
+      "Package",
+      file = app_description_path
+    ),
+    version = desc::desc_get(
+      "Version",
+      file = app_description_path
+    )
   )
 
   return(dir)
