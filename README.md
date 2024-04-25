@@ -61,5 +61,6 @@ To open the app’s graphical interface, simply run this command in the R
 console:
 
 ``` r
+library(cleanstart)
 run_app()
 ```
