@@ -17,6 +17,7 @@
 #' context for `check_if_miss` and `validate`.
 #' @field vars_for_file Character vector. Names of variables selected for 
 #' cleaning file to be created.
+#' @field df_for_file Data frame. Metadata for creating Stata file.
 r6 = R6::R6Class(
   classname = "r6",
   public = list(
@@ -37,6 +38,7 @@ r6 = R6::R6Class(
     oth_var_pattern = NULL,
     show_vars = NULL,
     vars_for_file = NULL,
+    df_for_file = NULL,
 
     # ==========================================================================
     # Methods
@@ -63,12 +65,12 @@ r6 = R6::R6Class(
       # data frame fields need to be extracted from a list
       # "scalar" fields can be extracted directly
       for (field in fields) {
-          field_type <- typeof(input_file[[field]])
-          if (field_type == "list") {
-            self[[field]] <- input_file[[field]][[1]]
-          } else {
-            self[[field]] <- input_file[[field]]
-          }
+        field_type <- typeof(input_file[[field]])
+        if (field_type == "list") {
+          self[[field]] <- input_file[[field]][[1]]
+        } else {
+          self[[field]] <- input_file[[field]]
+        }
       }
 
     },
@@ -85,7 +87,9 @@ r6 = R6::R6Class(
     write = function(path = fs::path(self[["app_dir"]], "saved_r6.rds")) {
 
       # data frame fields
-      df_fields <- c("prepared_qnr_df", "vars_in_qnr", "vars_for_file", "df_for_file")
+      df_fields <- c(
+        "prepared_qnr_df", "vars_in_qnr", "vars_for_file", "df_for_file"
+      )
 
       # "scalar" fields
       # introspect to obtain vector fields and methods
@@ -93,14 +97,14 @@ r6 = R6::R6Class(
 
       # remove system components and methods
       fields <- fields[
-          ! fields %in% c(
-              # system components
-              ".__enclos_env__", "clone",
-              # methods
-              "write", "update", "read",
-              # omitting data frames
-              df_fields
-          )
+        ! fields %in% c(
+          # system components
+          ".__enclos_env__", "clone",
+          # methods
+          "write", "update", "read",
+          # omitting data frames
+          df_fields
+        )
       ]
 
       # put fields in data frame
@@ -111,7 +115,7 @@ r6 = R6::R6Class(
       for (field in fields) {
           df[[field]] <- self[[field]]
       }
-    
+
       # put data frames in data frame
       for (df_field in df_fields) {
         df[[df_field]] <- list(self[[df_field]])
@@ -119,8 +123,8 @@ r6 = R6::R6Class(
 
       # write data frame to disk
       saveRDS(
-          object = df,
-          file = path
+        object = df,
+        file = path
       )
 
     }
