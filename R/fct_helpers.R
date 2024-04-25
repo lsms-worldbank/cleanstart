@@ -50,7 +50,8 @@ create_user_app_dir <- function() {
   # confirm that user app data directory exists
   app_dir_exists <- fs::dir_exists(app_dir)
   if (app_dir_exists == TRUE) {
-    cat(glue::glue("App directory created at {app_dir}"))
+    # NOTE: uncomment for testing
+    # cat(glue::glue("App directory created at {app_dir}"))
     return(app_dir)
   } else {
     stop("App data directory could not be created")
