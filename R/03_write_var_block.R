@@ -149,9 +149,9 @@ write_answer_options <- function(
                # empty answer_text and answer_value columns 
                 values_drop_na = TRUE
             ) |>
-            dplyr::rename(label = text) |>
-            dplyr::relocate(label, .before = label) |>
-            dplyr::select(value, label)
+            dplyr::rename(label = .data$text) |>
+            dplyr::relocate(.data$label, .before = .data$label) |>
+            dplyr::select(.data$value, .data$label)
     }
 
     if (has_answer_options == 1) {
@@ -195,7 +195,7 @@ write_validation_txt <- function(
 
     conditions <- var_df %>%
         # select columns
-        dplyr::select(varname, condition_expression) %>%
+        dplyr::select(.data$varname, .data$condition_expression) %>%
         dplyr::mutate(
             if_condition = dplyr::if_else(
                 condition = (
@@ -206,17 +206,20 @@ write_validation_txt <- function(
                 false = as.character(glue::glue("if ({condition_expression})"))
             )            
         ) %>%
-        dplyr::select(varname, if_condition)
+        dplyr::select(.data$varname, .data$if_condition)
     
     validations <- var_df %>%
         # select variable name and components of validation
         dplyr::select(
-            varname, 
+            .data$varname, 
             dplyr::starts_with("validation_"), dplyr::starts_with("severity_")
         ) %>%
         # pivot into long format while dropping any NA obs
         tidyr::pivot_longer(
-            cols = c(dplyr::starts_with("validation_"), dplyr::starts_with("severity_")),
+            cols = c(
+                dplyr::starts_with("validation_"),
+                dplyr::starts_with("severity_")
+            ),
             names_pattern = "([a-z_]+)_([0-9]+)",
             names_to = c(".value", "id"),
             values_drop_na = TRUE, 
@@ -236,7 +239,7 @@ write_validation_txt <- function(
                 .sep = "\n"
                 )
             ) %>%
-            dplyr::select(txt) %>%
+            dplyr::select(.data$txt) %>%
             dplyr::pull(.data$txt) %>%
             glue::glue_collapse(sep = "\n\n")
 
